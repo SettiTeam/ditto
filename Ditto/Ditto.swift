@@ -17,39 +17,55 @@ public class Ditto {
     private static var configuration: DittoConfiguration!
     private static var layoutSheet: DittoSheet = [:]
     
-    private let key: String
+    private let keys: [ String ]
     private weak var view: UIView!
-    private var views = [ String: UIView ]()
-    private var blocks =  [ String: [ DittoBlock ] ]()
-    private var currentConstraints = [ NSLayoutConstraint ]()
+    private var views: [ String: UIView ] = [:]
+    private var blocks: [[ DittoBlock ]] = []
+    private var currentConstraints: [ NSLayoutConstraint ] = []
     
     
-    public init(key: String,
+    public init(
+        key: String? = nil,
+        keys: [ String ] = [],
         view: UIView,
-        var views: [ String: UIView ],
-        additionalBlocks: [ String: [ DittoBlock ] ] = [:]
+        views: [ String: UIView ],
+        placeholders: [ String ] = [],
+        additionalBlocks: [[ DittoBlock ]] = []
     ) {
-        self.key = key
+        var keys = keys
+        var views = views
+
+        if key != nil {
+            keys.append(key!)
+        }
+        
+        self.keys = keys
         self.view = view
         
         // add blocks from sheets
-        if let b = Ditto.layoutSheet[key] {
-            blocks = b
+        for key in keys {
+            if let b = Ditto.layoutSheet[key] {
+                blocks.append(b)
+            }
         }
         
         // add additional blocks
-        for (key, b) in additionalBlocks {
-            if blocks[key] == nil {
-                blocks[key] = b
-            }
-            else {
-                blocks[key]?.appendContentsOf(b)
-            }
+        for b in additionalBlocks {
+            blocks.append(b)
         }
         
         // Prepare views
-        for (_, view) in views {
-            view.translatesAutoresizingMaskIntoConstraints = false
+        for s in placeholders {
+            if views[s] == nil {
+                let v = UIView()
+                v.hidden = true
+                view.addSubview(v)
+                views[s] = v
+            }
+        }
+        
+        for (_, v) in views {
+            v.translatesAutoresizingMaskIntoConstraints = false
         }
         
         // set super view
@@ -72,42 +88,41 @@ public class Ditto {
     }
     
     public func set(immediate: Bool = false) {
-        
         removeConstraints()
         
-        for (_, group) in blocks {
-            let block = getMatchedBlock(group)
+        for group in blocks {
+            if let block = getMatchedBlock(group) {
                 
-            if !block.constraints.isEmpty {
-                currentConstraints.appendContentsOf(block.constraints)
-                view.addConstraints(block.constraints)
-            }
-            
-            for string in block.strings {
+                if !block.constraints.isEmpty {
+                    currentConstraints.appendContentsOf(block.constraints)
+                    view.addConstraints(block.constraints)
+                }
                 
-                // CenterX:
-                if string.containsString("CenterX:") {
-                    addCenterXConstraint(string)
+                for string in block.strings {
+                    
+                    // CenterX:
+                    if string.containsString("CenterX:") {
+                        addCenterXConstraint(string)
+                    }
+                    // CenterY:
+                    else if string.containsString("CenterY:") {
+                        addCenterYConstraint(string)
+                    }
+                    // Hide:
+                    else if string.containsString("Hide:") {
+                        hideView(string)
+                    }
+                    // Show:
+                    else if string.containsString("Show:") {
+                        showView(string)
+                    }
+                    // VFL
+                    else {
+                        addVFLConstraint(string)
+                    }
+        
                 }
-                // CenterY:
-                else if string.containsString("CenterY:") {
-                    addCenterYConstraint(string)
-                }
-                // Hide:
-                else if string.containsString("Hide:") {
-                    hideView(string)
-                }
-                // Show:
-                else if string.containsString("Show:") {
-                    showView(string)
-                }
-                // VFL
-                else {
-                    addVFLConstraint(string)
-                }
-    
             }
-            
         }
         
         if (immediate) {
@@ -117,8 +132,8 @@ public class Ditto {
 
     }
     
-    private func addCenterXConstraint(var string: String) {
-        string = String(string.characters.dropFirst(9))
+    private func addCenterXConstraint(string: String) {
+        var string = String(string.characters.dropFirst(9))
         string = String(string.characters.dropLast(2))
         
         let views = string.characters.split{$0 == "["}.map(String.init)
@@ -146,8 +161,8 @@ public class Ditto {
         view.addConstraint(c)
     }
     
-    private func addCenterYConstraint(var string: String) {
-        string = String(string.characters.dropFirst(9))
+    private func addCenterYConstraint(string: String) {
+        var string = String(string.characters.dropFirst(9))
         string = String(string.characters.dropLast(2))
         
         let views = string.characters.split{$0 == "["}.map(String.init)
@@ -175,15 +190,15 @@ public class Ditto {
         view.addConstraint(c)
     }
     
-    private func hideView(var string: String) {
-        string = String(string.characters.dropFirst(6))
+    private func hideView(string: String) {
+        var string = String(string.characters.dropFirst(6))
         string = String(string.characters.dropLast(1))
         
         views[string]?.hidden = true
     }
     
-    private func showView(var string: String) {
-        string = String(string.characters.dropFirst(6))
+    private func showView(string: String) {
+        var string = String(string.characters.dropFirst(6))
         string = String(string.characters.dropLast(1))
         
         views[string]?.hidden = false
@@ -204,7 +219,7 @@ public class Ditto {
     
     // MARK: Match Blocks
     
-    private func getMatchedBlock(blocks: [ DittoBlock ]) -> DittoBlock {
+    private func getMatchedBlock(blocks: [ DittoBlock ]) -> DittoBlock? {
         var block: DittoBlock!
         var score = -1
         
@@ -235,7 +250,7 @@ public class Ditto {
     private func registerDimensionsDidChangeNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
-            selector: "onDimensionsDidChange",
+            selector: #selector(onDimensionsDidChange),
             name: DittoDimensionsDidChange,
             object: nil)
     }
@@ -320,11 +335,14 @@ public class Ditto {
     public static func Universal(
         width width: SizeClass? = nil,
         height: SizeClass? = nil,
-        var widths: [ SizeClass ] = [],
-        var heights: [ SizeClass ] = [],
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ] = []
     ) -> DittoBlock {
+        var widths = widths
+        var heights = heights
+        
         if let w = width {
             widths = [ w ]
         }
@@ -356,11 +374,14 @@ public class Ditto {
     public static func Phone(
         width width: SizeClass? = nil,
         height: SizeClass? = nil,
-        var widths: [ SizeClass ] = [],
-        var heights: [ SizeClass ] = [],
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ] = []
     ) -> DittoBlock {
+        var widths = widths
+        var heights = heights
+        
         if let w = width {
             widths = [ w ]
         }
@@ -392,11 +413,14 @@ public class Ditto {
     public static func Pad(
         width width: SizeClass? = nil,
         height: SizeClass? = nil,
-        var widths: [ SizeClass ] = [],
-        var heights: [ SizeClass ] = [],
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ] = []
     ) -> DittoBlock {
+        var widths = widths
+        var heights = heights
+        
         if let w = width {
             widths = [ w ]
         }

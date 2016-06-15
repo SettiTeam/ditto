@@ -65,6 +65,9 @@ public class DittoDimensions {
     
     /// true if the device is a multitasking iPad
     public static var isMultitasking: Bool!
+    
+    /// true if the device is an iPad Pro
+    public static var isPadPro: Bool!
 
     
     
@@ -104,9 +107,10 @@ public class DittoDimensions {
         widthClass = setWidthClass()
         resolutionClass = setResolutionClass()
         
-        isRetina = UIScreen.mainScreen().respondsToSelector(Selector("scale")) && UIScreen.mainScreen().scale >= 2.0
+        isRetina = UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale)) && UIScreen.mainScreen().scale >= 2.0
         isHeightOversize = setHeightOversize()
         isMultitasking = setIsMultitasking()
+        isPadPro = setIsPadPro()
         
         isNewOrientation = (orientation != tempOrientation)
         tempOrientation = orientation
@@ -159,7 +163,7 @@ public class DittoDimensions {
         }
         
         if configuration.treatsMultitaskingPadAsPhoneInLandscapeSecondary {
-            if orientation == Orientation.Landscape && screenWidth < deviceWidth / 2 {
+            if orientation == Orientation.Landscape && screenWidth < deviceWidth / 2 - 10 {
                 return .Phone
             }
         }
@@ -175,6 +179,7 @@ public class DittoDimensions {
             if screenHeight < configuration.breakpoints.phoneHeightMedium {
                 return .Medium
             }
+            return .Large
         }
         
         if screenHeight < configuration.breakpoints.padHeightSmall {
@@ -209,7 +214,7 @@ public class DittoDimensions {
     }
     
     private static func setResolutionClass() -> DensityClass {
-        if !UIScreen.mainScreen().respondsToSelector(Selector("scale")) {
+        if !UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale)) {
             return DensityClass.Low
         }
         
@@ -231,6 +236,10 @@ public class DittoDimensions {
 
     private static func setIsMultitasking() -> Bool {
         return screenWidth < deviceWidth
+    }
+    
+    private static func setIsPadPro() -> Bool {
+        return deviceClass == .Pad && (screenWidth == 1366 || screenHeight == 1366)
     }
     
 }

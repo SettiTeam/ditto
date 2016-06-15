@@ -24,5 +24,5 @@ public enum DensityClass {
     case Low, Medium, High
 }
 
-public typealias DittoSheet = [ String: [ String: [ DittoBlock ] ] ]
+public typealias DittoSheet = [ String: [ DittoBlock ] ]
 

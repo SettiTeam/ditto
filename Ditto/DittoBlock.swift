@@ -32,7 +32,7 @@ public class DittoBlock {
     
     func match() -> Int {
         var score = 0
-
+                
         // device
         if !(devices.isEmpty || devices.contains(DittoDimensions.screenClass)) {
             return -1
@@ -40,12 +40,12 @@ public class DittoBlock {
         
         // width
         if widths.isEmpty || widths.contains(DittoDimensions.widthClass) {
-            score++
+            score += 1
         }
         
         // height
         if heights.isEmpty || heights.contains(DittoDimensions.heightClass) {
-            score++
+            score += 1
         }
         
         return score
