@@ -22,7 +22,7 @@ public class DittoBlock {
         heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ]
-    ) {
+        ) {
         self.devices = devices
         self.widths = widths
         self.heights = heights
@@ -32,7 +32,7 @@ public class DittoBlock {
     
     func match() -> Int {
         var score = 0
-                
+        
         // device
         if !(devices.isEmpty || devices.contains(DittoDimensions.screenClass)) {
             return -1

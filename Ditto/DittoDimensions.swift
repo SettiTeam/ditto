@@ -24,13 +24,13 @@ public class DittoDimensions {
     
     /// The hight of the device
     public static var deviceHeight: CGFloat!
-
+    
     /// The width of the application window
     public static var screenWidth: CGFloat!
     
     /// The height of the application window
     public static var screenHeight: CGFloat!
-
+    
     
     
     // MARK: Current Classes
@@ -68,7 +68,7 @@ public class DittoDimensions {
     
     /// true if the device is an iPad Pro
     public static var isPadPro: Bool!
-
+    
     
     
     // MARK: Details of Notification
@@ -117,18 +117,18 @@ public class DittoDimensions {
         
         isNewScreenClass = (screenClass != tempScreenClass)
         tempScreenClass = screenClass
-
+        
         isNewWidthClass = (widthClass != tempWidthClass)
         tempWidthClass = widthClass
-
+        
         isNewHeightClass = (heightClass != tempHeightClass)
         tempHeightClass = heightClass
-
+        
         if isNewOrientation || isNewScreenClass || isNewWidthClass || isNewHeightClass {
             NSNotificationCenter.defaultCenter()
                 .postNotificationName(DittoDimensionsDidChange, object: nil)
         }
-
+        
     }
     
     
@@ -233,7 +233,7 @@ public class DittoDimensions {
         return screenClass == ScreenClass.Phone
             && screenHeight >= configuration.heightOversizeThreshold
     }
-
+    
     private static func setIsMultitasking() -> Bool {
         return screenWidth < deviceWidth
     }
