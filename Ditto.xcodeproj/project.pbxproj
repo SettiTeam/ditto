@@ -63,13 +63,13 @@
 		A3D23F731C04F54700A1466B /* Ditto */ = {
 			isa = PBXGroup;
 			children = (
-				A3535EAC1D11BE8A00E1BDB1 /* DittoHelper.swift */,
 				A3D23F741C04F54700A1466B /* Ditto.h */,
 				A3D23F761C04F54700A1466B /* Info.plist */,
 				A3D23F7C1C04F6B200A1466B /* Ditto.swift */,
 				A3D23F7F1C04F6B200A1466B /* DittoBlock.swift */,
 				A3D23F7D1C04F6B200A1466B /* DittoConfiguration.swift */,
 				A3D23F811C04F6B200A1466B /* DittoDimensions.swift */,
+				A3535EAC1D11BE8A00E1BDB1 /* DittoHelper.swift */,
 				A3D23F7E1C04F6B200A1466B /* DittoTypes.swift */,
 				A3D23F801C04F6B200A1466B /* DittoTracker.swift */,
 			);

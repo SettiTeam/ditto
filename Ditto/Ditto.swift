@@ -31,7 +31,7 @@ public class Ditto {
         views: [ String: UIView ],
         placeholders: [ String ] = [],
         additionalBlocks: [[ DittoBlock ]] = []
-        ) {
+    ) {
         var keys = keys
         var views = views
         

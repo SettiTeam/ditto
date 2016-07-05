@@ -183,5 +183,14 @@ public class DittoHelpers {
         }
         
     }
+    
+    
+    
+    public static func setFullHorizontalAndVerticalConstraints(superView: UIView, views: [ UIView ]) {
+        
+        setFullHorizontalConstraints(superView, views: views)
+        setFullVerticalConstraints(superView, views: views)
+        
+    }
 
 }
