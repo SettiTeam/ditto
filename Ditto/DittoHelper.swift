@@ -10,14 +10,16 @@ import Foundation
 
 public class DittoHelpers {
     
-    public static func setEqualHorizontalConstraints(superView: UIView, views: [ UIView ]) {
+    public static func setEqualHorizontalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
 
+        let toView = toView ?? superView
+        
         for (index, view) in views.enumerate() {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
             if index == 0 {
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Leading,
@@ -28,7 +30,7 @@ public class DittoHelpers {
                         constant: 0))
             }
             else {
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Leading,
@@ -38,7 +40,7 @@ public class DittoHelpers {
                         multiplier: 1,
                         constant: 0))
                 
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Width,
@@ -50,7 +52,7 @@ public class DittoHelpers {
             }
             
             if index == views.count - 1 {                
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Trailing,
@@ -67,14 +69,16 @@ public class DittoHelpers {
     
     
     
-    public static func setEqualVerticalConstraints(superView: UIView, views: [ UIView ]) {
+    public static func setEqualVerticalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+        
+        let toView = toView ?? superView
         
         for (index, view) in views.enumerate() {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
             if index == 0 {
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Top,
@@ -85,7 +89,7 @@ public class DittoHelpers {
                         constant: 0))
             }
             else {
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Top,
@@ -95,7 +99,7 @@ public class DittoHelpers {
                         multiplier: 1,
                         constant: 0))
                 
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Height,
@@ -107,7 +111,7 @@ public class DittoHelpers {
             }
             
             if index == views.count - 1 {
-                superView.addConstraint(
+                toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
                         attribute: .Bottom,
@@ -124,13 +128,15 @@ public class DittoHelpers {
     
     
     
-    public static func setFullVerticalConstraints(superView: UIView, views: [ UIView ]) {
+    public static func setFullVerticalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
         
+        let toView = toView ?? superView
+
         for view in views {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
-            superView.addConstraints([
+            toView.addConstraints([
                 NSLayoutConstraint(
                     item: view,
                     attribute: .Top,
@@ -155,13 +161,15 @@ public class DittoHelpers {
     
     
     
-    public static func setFullHorizontalConstraints(superView: UIView, views: [ UIView ]) {
-        
+    public static func setFullHorizontalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+
+        let toView = toView ?? superView
+
         for view in views {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
-            superView.addConstraints([
+            toView.addConstraints([
                 NSLayoutConstraint(
                     item: view,
                     attribute: .Left,
