@@ -28,15 +28,21 @@ public class Ditto {
         key: String? = nil,
         keys: [ String ] = [],
         view: UIView,
-        views: [ String: UIView ],
+        views: [ String: UIView? ],
         placeholders: [ String ] = [],
         additionalBlocks: [[ DittoBlock ]] = []
     ) {
         var keys = keys
-        var views = views
+        var filteredViews: [ String: UIView ] = [:]
         
         if key != nil {
             keys.append(key!)
+        }
+        
+        for (key, view) in views {
+            if let v = view {
+                filteredViews[key] = v
+            }
         }
         
         self.keys = keys
@@ -56,21 +62,21 @@ public class Ditto {
         
         // Prepare views
         for s in placeholders {
-            if views[s] == nil {
+            if filteredViews[s] == nil {
                 let v = UIView()
                 v.hidden = true
                 view.addSubview(v)
-                views[s] = v
+                filteredViews[s] = v
             }
         }
         
-        for (_, v) in views {
+        for (_, v) in filteredViews {
             v.translatesAutoresizingMaskIntoConstraints = false
         }
         
         // set super view
-        views["super"] = view
-        self.views = views
+        filteredViews["super"] = view
+        self.views = filteredViews
         
         //        DittoTracker.open(key)
         
@@ -104,19 +110,19 @@ public class Ditto {
                     if string.containsString("CenterX:") {
                         addCenterXConstraint(string)
                     }
-                        // CenterY:
+                    // CenterY:
                     else if string.containsString("CenterY:") {
                         addCenterYConstraint(string)
                     }
-                        // Hide:
+                    // Hide:
                     else if string.containsString("Hide:") {
                         hideView(string)
                     }
-                        // Show:
+                    // Show:
                     else if string.containsString("Show:") {
                         showView(string)
                     }
-                        // VFL
+                    // VFL
                     else {
                         addVFLConstraint(string)
                     }
