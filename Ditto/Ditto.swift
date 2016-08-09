@@ -1,15 +1,19 @@
 //
-//  Layout.swift
-//  DailyCuriosity
+//  Ditto.swift
+//  Ditto
 //
-//  Created by Chase McClure on 11/19/15.
-//  Copyright © 2015 Curiosity. All rights reserved.
+//  Created by 🍕Chase McClure on 8/9/16.
+//  Copyright (c) 2016 Curiosity. All rights reserved.
 //
 
 import Foundation
 
-@objc public protocol DittoLayoutable {
-    func teardownLayout()
+class DittoWeakView {
+    weak var view: UIView?
+    
+    init(view: UIView) {
+        self.view = view
+    }
 }
 
 public class Ditto {
@@ -18,207 +22,208 @@ public class Ditto {
     private static var layoutSheet: DittoSheet = [:]
     
     private var keys: [ String ]!
-    private weak var view: UIView!
-    private var views: [ String: UIView ] = [:]
+    private weak var superView: UIView!
+    private var weakViews: [ String: DittoWeakView ] = [:]
     private var blocks: [[ DittoBlock ]] = []
-    private var currentConstraints: [ NSLayoutConstraint ] = []
     
     
     public init(
-        key: String? = nil,
         keys: [ String ] = [],
-        view: UIView,
+        superView: UIView,
         views: [ String: UIView? ],
-        placeholders: [ String ] = [],
+        immediate: Bool = false,
         additionalBlocks: [[ DittoBlock ]] = []
     ) {
-        var keys = keys
-        var filteredViews: [ String: UIView ] = [:]
-
-        if key != nil {
-            keys.append(key!)
-        }
-
+        
+        self.keys = keys
+        
+        
+        // Parse and prepare views
+        
+        superView.translatesAutoresizingMaskIntoConstraints = false
+        weakViews["super"] = DittoWeakView(view: superView)
+        self.superView = superView
+        
         for (key, view) in views {
-            if let v = view {
-                filteredViews[key] = v
+            if let view = view {
+                view.translatesAutoresizingMaskIntoConstraints = false
+                self.weakViews[key] = DittoWeakView(view: view)
             }
         }
-
-        self.keys = keys
-        self.view = view
-
-        // add blocks from sheets
+        
+        
+        // Add Relevent Blocks
+        
         for key in keys {
             if let b = Ditto.layoutSheet[key] {
                 blocks.append(b)
             }
         }
-
-        // add additional blocks
+        
         for b in additionalBlocks {
             blocks.append(b)
         }
-        
-        // Prepare views
-        for s in placeholders {
-            if filteredViews[s] == nil {
-                let v = UIView()
-                v.hidden = true
-                view.addSubview(v)
-                filteredViews[s] = v
-            }
-        }
-        
-        for (_, v) in filteredViews {
-            v.translatesAutoresizingMaskIntoConstraints = false
-        }
 
-        // set super view
-        filteredViews["super"] = view
-        self.views = filteredViews
         
-        // DittoTracker.open(key)
-
-        // prepare for auto update
+        // Prepare for Auto Update
+        
         registerDimensionsDidChangeNotification()
+        
+        
+        // Apply the initial layout
+        
+        layout(immediate)
         
     }
     
     deinit {
-        //        DittoTracker.close(key)
-//        view = nil
-//        views = [:]
-//        currentConstraints = []
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    public func set(immediate: Bool = false) {
-//        removeConstraints()
-//        
-//        for group in blocks {
-//            if let block = getMatchedBlock(group) {
-//                
-//                if !block.constraints.isEmpty {
-//                    currentConstraints.appendContentsOf(block.constraints)
-//                    view.addConstraints(block.constraints)
-//                }
-//                
-//                for string in block.strings {
-//                    
-//                    // CenterX:
-//                    if string.containsString("CenterX:") {
-//                        addCenterXConstraint(string)
-//                    }
-//                    // CenterY:
-//                    else if string.containsString("CenterY:") {
-//                        addCenterYConstraint(string)
-//                    }
-//                    // Hide:
-//                    else if string.containsString("Hide:") {
-//                        hideView(string)
-//                    }
-//                    // Show:
-//                    else if string.containsString("Show:") {
-//                        showView(string)
-//                    }
-//                    // VFL
-//                    else {
-//                        addVFLConstraint(string)
-//                    }
-//                    
-//                }
-//            }
-//        }
-//        
-//        if (immediate) {
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        }
+    private func layout(immediate: Bool) {
+        
+        for group in blocks {
+            
+            if let block = getMatchedBlock(group) {
+
+                if !block.constraints.isEmpty {
+                    superView.addConstraints(block.constraints)
+                }
+
+                for string in block.strings {
+
+                    // CenterH:
+                    if string.containsString("CenterH:") {
+                        addCenterHConstraint(string)
+                    }
+                    // CenterV:
+                    else if string.containsString("CenterV:") {
+                        addCenterVConstraint(string)
+                    }
+                    // Center:
+                    else if string.containsString("Center:") {
+                        addCenterConstraint(string)
+                    }
+                    // VFL
+                    else {
+                        addVFLConstraint(string)
+                    }
+
+                }
+            }
+        }
+        
+        if immediate {
+            superView.setNeedsLayout()
+            superView.layoutIfNeeded()
+        }
         
     }
     
-    private func addCenterXConstraint(string: String) {
-//        var string = String(string.characters.dropFirst(9))
-//        string = String(string.characters.dropLast(2))
-//        
-//        let views = string.characters.split{$0 == "["}.map(String.init)
-//        
-//        if self.views[views[1]] == nil {
-//            print("CenterX: Constraint can't be set. Missing inner view \(views[1])")
-//            return
-//        }
-//        
-//        if self.views[views[0]] == nil {
-//            print("CenterX: Constraint can't be set. Missing outer view \(views[0])")
-//            return
-//        }
-//        
-//        let c = NSLayoutConstraint(
-//            item: self.views[views[1]]!,
-//            attribute: .CenterX,
-//            relatedBy: .Equal,
-//            toItem: self.views[views[0]],
-//            attribute: .CenterX,
-//            multiplier: 1,
-//            constant: 0)
-//        
-//        currentConstraints.append(c)
-//        view.addConstraint(c)
+    private func addCenterHConstraint(string: String) {
+        // "CenterH:[super[sub]]"
+        
+        var string = String(string.characters.dropFirst(9)) // "super[sub]]"
+        string = String(string.characters.dropLast(2)) // "super[sub"
+        
+        let strings = string.characters.split{ $0 == "[" }.map(String.init)
+        
+        guard
+            let outer = weakViews[strings[0]]?.view,
+            let inner = weakViews[strings[1]]?.view
+        else {
+            print("CenterH: Constraint can't be set.")
+            return
+        }
+        
+        superView.addConstraint(
+            NSLayoutConstraint(
+                item: inner,
+                attribute: .CenterX,
+                relatedBy: .Equal,
+                toItem: outer,
+                attribute: .CenterX,
+                multiplier: 1,
+                constant: 0))
     }
     
-    private func addCenterYConstraint(string: String) {
-//        var string = String(string.characters.dropFirst(9))
-//        string = String(string.characters.dropLast(2))
-//        
-//        let views = string.characters.split{$0 == "["}.map(String.init)
-//        
-//        if self.views[views[1]] == nil {
-//            print("CenterY: Constraint can't be set. Missing inner view \(views[1])")
-//            return
-//        }
-//        
-//        if self.views[views[0]] == nil {
-//            print("CenterY: Constraint can't be set. Missing outer view \(views[0])")
-//            return
-//        }
-//        
-//        let c = NSLayoutConstraint(
-//            item: self.views[views[1]]!,
-//            attribute: .CenterY,
-//            relatedBy: .Equal,
-//            toItem: self.views[views[0]]!,
-//            attribute: .CenterY,
-//            multiplier: 1,
-//            constant: 0)
-//        
-//        currentConstraints.append(c)
-//        view.addConstraint(c)
+    private func addCenterVConstraint(string: String) {
+        // "CenterV:[super[sub]]"
+        
+        var string = String(string.characters.dropFirst(9)) // "super[sub]]"
+        string = String(string.characters.dropLast(2)) // "super[sub"
+        
+        let strings = string.characters.split{ $0 == "[" }.map(String.init)
+        
+        guard
+            let outer = weakViews[strings[0]]?.view,
+            let inner = weakViews[strings[1]]?.view
+        else {
+            print("CenterV: Constraint can't be set.")
+            return
+        }
+        
+        superView.addConstraint(
+            NSLayoutConstraint(
+                item: inner,
+                attribute: .CenterY,
+                relatedBy: .Equal,
+                toItem: outer,
+                attribute: .CenterY,
+                multiplier: 1,
+                constant: 0))
     }
     
-    private func hideView(string: String) {
-//        var string = String(string.characters.dropFirst(6))
-//        string = String(string.characters.dropLast(1))
-//        
-//        views[string]?.hidden = true
-    }
-    
-    private func showView(string: String) {
-//        var string = String(string.characters.dropFirst(6))
-//        string = String(string.characters.dropLast(1))
-//        
-//        views[string]?.hidden = false
+    private func addCenterConstraint(string: String) {
+        // "Center:[super[sub]]"
+        
+        var string = String(string.characters.dropFirst(8)) // "super[sub]]"
+        string = String(string.characters.dropLast(2)) // "super[sub"
+        
+        let strings = string.characters.split{ $0 == "[" }.map(String.init)
+        
+        guard
+            let outer = weakViews[strings[0]]?.view,
+            let inner = weakViews[strings[1]]?.view
+        else {
+            print("Center: Constraint can't be set.")
+            return
+        }
+        
+        superView.addConstraints([
+            
+            NSLayoutConstraint(
+                item: inner,
+                attribute: .CenterX,
+                relatedBy: .Equal,
+                toItem: outer,
+                attribute: .CenterX,
+                multiplier: 1,
+                constant: 0),
+            
+            NSLayoutConstraint(
+                item: inner,
+                attribute: .CenterY,
+                relatedBy: .Equal,
+                toItem: outer,
+                attribute: .CenterY,
+                multiplier: 1,
+                constant: 0) ])
     }
     
     private func addVFLConstraint(string: String) {
-//        let c = NSLayoutConstraint.constraintsWithVisualFormat(
-//            string,
-//            options: [],
-//            metrics: nil,
-//            views: views )
-//        
-//        currentConstraints.appendContentsOf(c)
-//        view.addConstraints(c)
+        var views: [ String: UIView ] = [:]
+
+        for (key, weakView) in weakViews {
+            views[key] = weakView.view!
+        }
+        
+        superView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                string,
+                options: [],
+                metrics: nil,
+                views: views ))
     }
     
     
@@ -227,62 +232,36 @@ public class Ditto {
     
     private func getMatchedBlock(blocks: [ DittoBlock ]) -> DittoBlock? {
         var block: DittoBlock!
-//        var score = -1
-//        
-//        for b in blocks {
-//            let s = b.match()
-//            
-//            if s > score {
-//                block = b
-//                score = s
-//            }
-//        }
+        var score = -1
+        
+        for b in blocks {
+            let s = b.match()
+            
+            if s > score {
+                block = b
+                score = s
+            }
+        }
         
         return block
     }
     
     
     
-    // MARK: Remove Constraints
-    
-    public func removeConstraints() {
-//        for c in currentConstraints {
-//            c.active = false
-//        }
-//        
-//        currentConstraints = []
-    }
+    // MARK: Dimension Change for Auto Update
     
     private func registerDimensionsDidChangeNotification() {
-//        NSNotificationCenter.defaultCenter().addObserver(
-//            self,
-//            selector: #selector(onDimensionsDidChange),
-//            name: DittoDimensionsDidChange,
-//            object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(onDimensionsDidChange),
+            name: DittoDimensionsDidChange,
+            object: nil)
     }
     
     @objc private func onDimensionsDidChange() {
-//        set(true)
+        layout(true)
     }
-    
-    
-    
-    /*
-     * Cleans up an array of views that have layouts
-     */
-    public static func cleanUp(views: AnyObject) {
-//        if let v = views as? [ DittoLayoutable? ] {
-//            for view in v {
-//                view?.teardownLayout()
-//            }
-//        }
-    }
-    
-    public static func cleanUp(view: DittoLayoutable?) {
-//        view?.teardownLayout()
-    }
-    
-    
+
     
     
     // MARK: Initialize the Layout Engine
