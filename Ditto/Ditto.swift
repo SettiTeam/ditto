@@ -31,7 +31,7 @@ public class Ditto {
         keys: [ String ] = [],
         superView: UIView,
         views: [ String: UIView? ],
-        immediate: Bool = false,
+        layoutImmediately immediate: Bool = false,
         additionalBlocks: [[ DittoBlock ]] = []
     ) {
         
