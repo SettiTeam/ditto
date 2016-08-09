@@ -40,7 +40,6 @@ public class Ditto {
         
         // Parse and prepare views
         
-        superView.translatesAutoresizingMaskIntoConstraints = false
         weakViews["super"] = DittoWeakView(view: superView)
         self.superView = superView
         
@@ -80,7 +79,7 @@ public class Ditto {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    private func layout(immediate: Bool) {
+    public func layout(immediate: Bool) {
         
         for group in blocks {
             
