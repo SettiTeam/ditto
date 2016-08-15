@@ -126,7 +126,10 @@ public class DittoDimensions {
         
         if isNewOrientation || isNewScreenClass || isNewWidthClass || isNewHeightClass {
             NSNotificationCenter.defaultCenter()
-                .postNotificationName(DittoDimensionsDidChange, object: nil)
+                .postNotificationName(
+                    DittoDimensionsDidChange, object: nil,
+                    userInfo: [
+                        "isNewScreenClass": isNewScreenClass ])
         }
         
     }

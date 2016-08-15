@@ -10,8 +10,6 @@ import Foundation
 
 public class DittoConfiguration {
     
-    var enableLayoutTracker = true
-    
     var treatsMultitaskingPadAsPhoneInPortrait = true
     var treatsMultitaskingPadAsPhoneInLandscapeSecondary = true
     

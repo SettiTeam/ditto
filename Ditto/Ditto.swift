@@ -25,6 +25,8 @@ public class Ditto {
     private weak var superView: UIView!
     private var weakViews: [ String: DittoWeakView ] = [:]
     private var blocks: [[ DittoBlock ]] = []
+    private var onDimensionChange: (() -> ())?
+    private var onScreenClassChange: (() -> ())?
     
     
     public init(
@@ -32,11 +34,13 @@ public class Ditto {
         superView: UIView,
         views: [ String: UIView? ],
         layoutImmediately immediate: Bool = false,
-        additionalBlocks: [[ DittoBlock ]] = []
+        additionalBlocks: [[ DittoBlock ]] = [],
+        onDimensionChange: (() -> ())? = nil,
+        onScreenClassChange: (() -> ())? = nil
     ) {
-        
         self.keys = keys
-        
+        self.onDimensionChange = onDimensionChange
+        self.onScreenClassChange = onScreenClassChange
         
         // Parse and prepare views
         
@@ -258,6 +262,14 @@ public class Ditto {
     }
     
     @objc private func onDimensionsDidChange() {
+        if onScreenClassChange != nil && DittoDimensions.isNewScreenClass {
+            return onScreenClassChange!()
+        }
+        
+        if onDimensionChange != nil {
+            return onDimensionChange!()
+        }
+        
         layout(true)
     }
 
