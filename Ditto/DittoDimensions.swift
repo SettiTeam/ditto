@@ -7,6 +7,26 @@
 //
 
 import Foundation
+/*fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}*/
+
 
 public let DittoDimensionsDidChange = "DittoDimensionsDidChange"
 
@@ -95,10 +115,10 @@ public class DittoDimensions {
     
     public static func set() {
         
-        deviceWidth = UIScreen.mainScreen().bounds.width
-        deviceHeight = UIScreen.mainScreen().bounds.height
-        screenWidth = UIApplication.sharedApplication().keyWindow!.bounds.width
-        screenHeight = UIApplication.sharedApplication().keyWindow!.bounds.height
+        deviceWidth = UIScreen.main.bounds.width
+        deviceHeight = UIScreen.main.bounds.height
+        screenWidth = UIApplication.shared.keyWindow!.bounds.width
+        screenHeight = UIApplication.shared.keyWindow!.bounds.height
         
         orientation = setOrientation()
         deviceClass = setDeviceClass()
@@ -107,7 +127,7 @@ public class DittoDimensions {
         widthClass = setWidthClass()
         resolutionClass = setResolutionClass()
         
-        isRetina = UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale)) && UIScreen.mainScreen().scale >= 2.0
+        isRetina = UIScreen.main.responds(to: #selector(NSDecimalNumberBehaviors.scale)) && UIScreen.main.scale >= 2.0
         isHeightOversize = setHeightOversize()
         isMultitasking = setIsMultitasking()
         isPadPro = setIsPadPro()
@@ -125,9 +145,9 @@ public class DittoDimensions {
         tempHeightClass = heightClass
         
         if isNewOrientation || isNewScreenClass || isNewWidthClass || isNewHeightClass {
-            NSNotificationCenter.defaultCenter()
-                .postNotificationName(
-                    DittoDimensionsDidChange, object: nil,
+            NotificationCenter.default
+                .post(
+                    name: Notification.Name(rawValue: DittoDimensionsDidChange), object: nil,
                     userInfo: [
                         "isNewScreenClass": isNewScreenClass ])
         }
@@ -139,101 +159,101 @@ public class DittoDimensions {
     // MARK: Setters
     
     private static func setOrientation() -> Orientation {
-        return UIApplication.sharedApplication().statusBarOrientation == .LandscapeLeft
-            || UIApplication.sharedApplication().statusBarOrientation == .LandscapeRight
-            ? .Landscape
-            : .Portrait
+        return UIApplication.shared.statusBarOrientation == .landscapeLeft
+            || UIApplication.shared.statusBarOrientation == .landscapeRight
+            ? .landscape
+            : .portrait
     }
     
     private static func setDeviceClass() -> ScreenClass {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            return .Pad
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return .pad
         }
         else {
-            return .Phone
+            return .phone
         }
     }
     
     private static func setScreenClass() -> ScreenClass {
-        if deviceClass == ScreenClass.Phone {
-            return .Phone
+        if deviceClass == ScreenClass.phone {
+            return .phone
         }
         
         if configuration.treatsMultitaskingPadAsPhoneInPortrait {
-            if orientation == Orientation.Portrait && screenWidth < deviceWidth {
-                return .Phone
+            if orientation == Orientation.portrait && screenWidth < deviceWidth {
+                return .phone
             }
         }
         
         if configuration.treatsMultitaskingPadAsPhoneInLandscapeSecondary {
-            if orientation == Orientation.Landscape && screenWidth < deviceWidth / 2 - 10 {
-                return .Phone
+            if orientation == Orientation.landscape && screenWidth < deviceWidth / 2 - 10 {
+                return .phone
             }
         }
         
-        return .Pad
+        return .pad
     }
     
     private static func setHeightClass() -> SizeClass {
-        if screenClass == ScreenClass.Phone {
+        if screenClass == ScreenClass.phone {
             if screenHeight < configuration.breakpoints.phoneHeightSmall {
-                return .Small
+                return .small
             }
             if screenHeight < configuration.breakpoints.phoneHeightMedium {
-                return .Medium
+                return .medium
             }
-            return .Large
+            return .large
         }
         
         if screenHeight < configuration.breakpoints.padHeightSmall {
-            return .Small
+            return .small
         }
         
         // There is currenly no concept of Medium Pad
         
-        return .Large
+        return .large
     }
     
     private static func setWidthClass() -> SizeClass {
-        if screenClass == ScreenClass.Phone {
+        if screenClass == ScreenClass.phone {
             if screenWidth < configuration.breakpoints.phoneWidthSmall {
-                return .Small
+                return .small
             }
             
             if screenWidth < configuration.breakpoints.phoneWidthMedium {
-                return .Medium
+                return .medium
             }
         }
         
         if screenWidth < configuration.breakpoints.padWidthSmall {
-            return .Small
+            return .small
         }
         
         if screenWidth < configuration.breakpoints.padWidthMedium {
-            return .Medium
+            return .medium
         }
         
-        return .Large
+        return .large
     }
     
     private static func setResolutionClass() -> DensityClass {
-        if !UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale)) {
-            return DensityClass.Low
+        if !UIScreen.main.responds(to: #selector(NSDecimalNumberBehaviors.scale)) {
+            return DensityClass.low
         }
         
-        if UIScreen.mainScreen().scale >= 3.0 {
-            return DensityClass.High
+        if UIScreen.main.scale >= 3.0 {
+            return DensityClass.high
         }
         
-        if UIScreen.mainScreen().scale >= 2.0 {
-            return DensityClass.Medium
+        if UIScreen.main.scale >= 2.0 {
+            return DensityClass.medium
         }
         
-        return DensityClass.Low
+        return DensityClass.low
     }
     
     private static func setHeightOversize() -> Bool {
-        return screenClass == ScreenClass.Phone
+        return screenClass == ScreenClass.phone
             && screenHeight >= configuration.heightOversizeThreshold
     }
     
@@ -242,7 +262,7 @@ public class DittoDimensions {
     }
     
     private static func setIsPadPro() -> Bool {
-        return deviceClass == .Pad && (screenWidth == 1366 || screenHeight == 1366)
+        return deviceClass == .pad && (screenWidth == 1366 || screenHeight == 1366)
     }
     
 }

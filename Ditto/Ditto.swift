@@ -33,7 +33,7 @@ public class Ditto {
         keys: [ String ] = [],
         superView: UIView,
         views: [ String: UIView? ],
-        layoutImmediately immediate: Bool = false,
+        layoutImmediately immediately: Bool = false,
         additionalBlocks: [[ DittoBlock ]] = [],
         onDimensionChange: (() -> ())? = nil,
         onScreenClassChange: (() -> ())? = nil
@@ -75,15 +75,15 @@ public class Ditto {
         
         // Apply the initial layout
         
-        layout(immediate)
+        layout(immediately: immediately)
         
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    public func layout(immediate: Bool) {
+    public func layout(immediately: Bool) {
         
         for group in blocks {
             
@@ -96,34 +96,34 @@ public class Ditto {
                 for string in block.strings {
 
                     // CenterH:
-                    if string.containsString("CenterH:") {
-                        addCenterHConstraint(string)
+                    if string.contains("CenterH:") {
+                        addCenterHConstraint(withString: string)
                     }
                     // CenterV:
-                    else if string.containsString("CenterV:") {
-                        addCenterVConstraint(string)
+                    else if string.contains("CenterV:") {
+                        addCenterVConstraint(withString: string)
                     }
                     // Center:
-                    else if string.containsString("Center:") {
-                        addCenterConstraint(string)
+                    else if string.contains("Center:") {
+                        addCenterConstraint(withString: string)
                     }
                     // VFL
                     else {
-                        addVFLConstraint(string)
+                        addVFLConstraint(withString: string)
                     }
 
                 }
             }
         }
         
-        if immediate {
+        if immediately {
             superView.setNeedsLayout()
             superView.layoutIfNeeded()
         }
         
     }
     
-    private func addCenterHConstraint(string: String) {
+    private func addCenterHConstraint(withString string: String) {
         // "CenterH:[super[sub]]"
         
         var string = String(string.characters.dropFirst(9)) // "super[sub]]"
@@ -142,15 +142,15 @@ public class Ditto {
         superView.addConstraint(
             NSLayoutConstraint(
                 item: inner,
-                attribute: .CenterX,
-                relatedBy: .Equal,
+                attribute: .centerX,
+                relatedBy: .equal,
                 toItem: outer,
-                attribute: .CenterX,
+                attribute: .centerX,
                 multiplier: 1,
                 constant: 0))
     }
     
-    private func addCenterVConstraint(string: String) {
+    private func addCenterVConstraint(withString string: String) {
         // "CenterV:[super[sub]]"
         
         var string = String(string.characters.dropFirst(9)) // "super[sub]]"
@@ -169,15 +169,15 @@ public class Ditto {
         superView.addConstraint(
             NSLayoutConstraint(
                 item: inner,
-                attribute: .CenterY,
-                relatedBy: .Equal,
+                attribute: .centerY,
+                relatedBy: .equal,
                 toItem: outer,
-                attribute: .CenterY,
+                attribute: .centerY,
                 multiplier: 1,
                 constant: 0))
     }
     
-    private func addCenterConstraint(string: String) {
+    private func addCenterConstraint(withString string: String) {
         // "Center:[super[sub]]"
         
         var string = String(string.characters.dropFirst(8)) // "super[sub]]"
@@ -197,24 +197,24 @@ public class Ditto {
             
             NSLayoutConstraint(
                 item: inner,
-                attribute: .CenterX,
-                relatedBy: .Equal,
+                attribute: .centerX,
+                relatedBy: .equal,
                 toItem: outer,
-                attribute: .CenterX,
+                attribute: .centerX,
                 multiplier: 1,
                 constant: 0),
             
             NSLayoutConstraint(
                 item: inner,
-                attribute: .CenterY,
-                relatedBy: .Equal,
+                attribute: .centerY,
+                relatedBy: .equal,
                 toItem: outer,
-                attribute: .CenterY,
+                attribute: .centerY,
                 multiplier: 1,
                 constant: 0) ])
     }
     
-    private func addVFLConstraint(string: String) {
+    private func addVFLConstraint(withString string: String) {
         var views: [ String: UIView ] = [:]
 
         for (key, weakView) in weakViews {
@@ -222,8 +222,8 @@ public class Ditto {
         }
         
         superView.addConstraints(
-            NSLayoutConstraint.constraintsWithVisualFormat(
-                string,
+            NSLayoutConstraint.constraints(
+                withVisualFormat: string,
                 options: [],
                 metrics: nil,
                 views: views ))
@@ -233,7 +233,7 @@ public class Ditto {
     
     // MARK: Match Blocks
     
-    private func getMatchedBlock(blocks: [ DittoBlock ]) -> DittoBlock? {
+    private func getMatchedBlock(_ blocks: [ DittoBlock ]) -> DittoBlock? {
         var block: DittoBlock!
         var score = -1
         
@@ -254,10 +254,10 @@ public class Ditto {
     // MARK: Dimension Change for Auto Update
     
     private func registerDimensionsDidChangeNotification() {
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(onDimensionsDidChange),
-            name: DittoDimensionsDidChange,
+            name: NSNotification.Name(rawValue: DittoDimensionsDidChange),
             object: nil)
     }
     
@@ -270,7 +270,7 @@ public class Ditto {
             return onDimensionChange!()
         }
         
-        layout(true)
+        layout(immediately: true)
     }
 
     
@@ -283,7 +283,7 @@ public class Ditto {
      - Parameter sheets: LayoutSheets to be considered
      - Parameter config: Configuration used
      */
-    public static func initialize(sheets: [ DittoSheet ], configuration: DittoConfiguration? = nil) {
+    public static func initialize(_ sheets: [ DittoSheet ], configuration: DittoConfiguration? = nil) {
         // Combine all sheets into a single private sheet
         for sheet in sheets {
             for (key, def) in sheet {
@@ -329,12 +329,12 @@ public class Ditto {
      - Returns: A targeted LayoutBlock
      */
     public static func Universal(
-        width width: SizeClass? = nil,
-          height: SizeClass? = nil,
-          widths: [ SizeClass ] = [],
-          heights: [ SizeClass ] = [],
-          constraints: [ NSLayoutConstraint ] = [],
-          strings: [ String ] = []
+        width: SizeClass? = nil,
+        height: SizeClass? = nil,
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
+        constraints: [ NSLayoutConstraint ] = [],
+        strings: [ String ] = []
     ) -> DittoBlock {
         var widths = widths
         var heights = heights
@@ -368,13 +368,13 @@ public class Ditto {
      - Returns: A targeted LayoutBlock
      */
     public static func Phone(
-        width width: SizeClass? = nil,
-              height: SizeClass? = nil,
-              widths: [ SizeClass ] = [],
-              heights: [ SizeClass ] = [],
-              constraints: [ NSLayoutConstraint ] = [],
-              strings: [ String ] = []
-        ) -> DittoBlock {
+        width: SizeClass? = nil,
+        height: SizeClass? = nil,
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
+        constraints: [ NSLayoutConstraint ] = [],
+        strings: [ String ] = []
+    ) -> DittoBlock {
         var widths = widths
         var heights = heights
         
@@ -387,7 +387,7 @@ public class Ditto {
         }
         
         return DittoBlock(
-            devices: [ .Phone ],
+            devices: [ .phone ],
             widths: widths,
             heights: heights,
             constraints: constraints,
@@ -407,13 +407,13 @@ public class Ditto {
      - Returns: A targeted LayoutBlock
      */
     public static func Pad(
-        width width: SizeClass? = nil,
-              height: SizeClass? = nil,
-              widths: [ SizeClass ] = [],
-              heights: [ SizeClass ] = [],
-              constraints: [ NSLayoutConstraint ] = [],
-              strings: [ String ] = []
-        ) -> DittoBlock {
+        width: SizeClass? = nil,
+        height: SizeClass? = nil,
+        widths: [ SizeClass ] = [],
+        heights: [ SizeClass ] = [],
+        constraints: [ NSLayoutConstraint ] = [],
+        strings: [ String ] = []
+    ) -> DittoBlock {
         var widths = widths
         var heights = heights
         
@@ -426,7 +426,7 @@ public class Ditto {
         }
         
         return DittoBlock(
-            devices: [ .Pad ],
+            devices: [ .pad ],
             widths: widths,
             heights: heights,
             constraints: constraints,
