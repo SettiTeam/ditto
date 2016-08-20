@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Curiosity. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class DittoWeakView {
     weak var view: UIView?

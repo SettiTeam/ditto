@@ -6,7 +6,7 @@
 //  Copyright © 2015 Curiosity. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public class DittoBlock {
     
@@ -22,7 +22,7 @@ public class DittoBlock {
         heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ]
-        ) {
+    ) {
         self.devices = devices
         self.widths = widths
         self.heights = heights
