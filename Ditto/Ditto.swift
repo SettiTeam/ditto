@@ -84,6 +84,10 @@ public class Ditto {
     }
     
     public func layout(immediate: Bool) {
+        if superView == nil {
+            return
+        }
+        
         
         for group in blocks {
             
