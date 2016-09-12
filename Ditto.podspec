@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
 
 s.platform = :ios
-s.ios.deployment_target = '8.0'
+s.ios.deployment_target = '9.0'
 s.name = "Ditto"
 s.summary = "Layouts for all the devices."
 s.requires_arc = true
-s.version = "0.2.1"
+s.version = "0.3"
 s.license = { :type => "MIT", :file => "LICENSE" }
 s.author = { "Chase McClure" => "chase@curiosity.com" }
 s.homepage = "https://github.com/Curiosity/Ditto"
