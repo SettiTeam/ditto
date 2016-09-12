@@ -10,7 +10,7 @@ import Foundation
 
 public class DittoHelpers {
     
-    public static func addEqualHConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addEqualHConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
 
         let toView = toView ?? superView
         
@@ -69,7 +69,7 @@ public class DittoHelpers {
     
     
     
-    public static func addEqualVConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addEqualVConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
         
         let toView = toView ?? superView
         
@@ -128,7 +128,7 @@ public class DittoHelpers {
     
     
     
-    public static func addFullVConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addFullVConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
         
         let toView = toView ?? superView
 
@@ -161,7 +161,7 @@ public class DittoHelpers {
     
     
     
-    public static func addFullHConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addFullHConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
 
         let toView = toView ?? superView
 
@@ -194,9 +194,9 @@ public class DittoHelpers {
     
     
     
-    open static func addFullConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
-        addFullHConstraints(superView: superView, views: views, toView: toView)
-        addFullVConstraints(superView: superView, views: views, toView: toView)
+    open static func addFullConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+        addFullHConstraints(withSuperView: superView, views: views, toView: toView)
+        addFullVConstraints(withSuperView: superView, views: views, toView: toView)
     }
 
 }
