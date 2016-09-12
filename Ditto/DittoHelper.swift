@@ -10,11 +10,11 @@ import Foundation
 
 public class DittoHelpers {
     
-    public static func setEqualHorizontalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addEqualHConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
 
         let toView = toView ?? superView
         
-        for (index, view) in views.enumerate() {
+        for (index, view) in views.enumerated() {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
@@ -22,10 +22,10 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Leading,
-                        relatedBy: .Equal,
+                        attribute: .leading,
+                        relatedBy: .equal,
                         toItem: superView,
-                        attribute: .Leading,
+                        attribute: .leading,
                         multiplier: 1,
                         constant: 0))
             }
@@ -33,20 +33,20 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Leading,
-                        relatedBy: .Equal,
+                        attribute: .leading,
+                        relatedBy: .equal,
                         toItem: views[index - 1],
-                        attribute: .Trailing,
+                        attribute: .trailing,
                         multiplier: 1,
                         constant: 0))
                 
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Width,
-                        relatedBy: .Equal,
+                        attribute: .width,
+                        relatedBy: .equal,
                         toItem: views[0],
-                        attribute: .Width,
+                        attribute: .width,
                         multiplier: 1,
                         constant: 0))
             }
@@ -55,10 +55,10 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Trailing,
-                        relatedBy: .Equal,
+                        attribute: .trailing,
+                        relatedBy: .equal,
                         toItem: superView,
-                        attribute: .Trailing,
+                        attribute: .trailing,
                         multiplier: 1,
                         constant: 0))
             }
@@ -69,11 +69,11 @@ public class DittoHelpers {
     
     
     
-    public static func setEqualVerticalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addEqualVConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
         
         let toView = toView ?? superView
         
-        for (index, view) in views.enumerate() {
+        for (index, view) in views.enumerated() {
             
             view.translatesAutoresizingMaskIntoConstraints = false
             
@@ -81,10 +81,10 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Top,
-                        relatedBy: .Equal,
+                        attribute: .top,
+                        relatedBy: .equal,
                         toItem: superView,
-                        attribute: .Top,
+                        attribute: .top,
                         multiplier: 1,
                         constant: 0))
             }
@@ -92,20 +92,20 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Top,
-                        relatedBy: .Equal,
+                        attribute: .top,
+                        relatedBy: .equal,
                         toItem: views[index - 1],
-                        attribute: .Bottom,
+                        attribute: .bottom,
                         multiplier: 1,
                         constant: 0))
                 
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Height,
-                        relatedBy: .Equal,
+                        attribute: .height,
+                        relatedBy: .equal,
                         toItem: views[0],
-                        attribute: .Height,
+                        attribute: .height,
                         multiplier: 1,
                         constant: 0))
             }
@@ -114,10 +114,10 @@ public class DittoHelpers {
                 toView.addConstraint(
                     NSLayoutConstraint(
                         item: view,
-                        attribute: .Bottom,
-                        relatedBy: .Equal,
+                        attribute: .bottom,
+                        relatedBy: .equal,
                         toItem: superView,
-                        attribute: .Bottom,
+                        attribute: .bottom,
                         multiplier: 1,
                         constant: 0))
             }
@@ -128,7 +128,7 @@ public class DittoHelpers {
     
     
     
-    public static func setFullVerticalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addFullVConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
         
         let toView = toView ?? superView
 
@@ -139,19 +139,19 @@ public class DittoHelpers {
             toView.addConstraints([
                 NSLayoutConstraint(
                     item: view,
-                    attribute: .Top,
-                    relatedBy: .Equal,
+                    attribute: .top,
+                    relatedBy: .equal,
                     toItem: superView,
-                    attribute: .Top,
+                    attribute: .top,
                     multiplier: 1,
                     constant: 0),
                 
                 NSLayoutConstraint(
                     item: view,
-                    attribute: .Bottom,
-                    relatedBy: .Equal,
+                    attribute: .bottom,
+                    relatedBy: .equal,
                     toItem: superView,
-                    attribute: .Bottom,
+                    attribute: .bottom,
                     multiplier: 1,
                     constant: 0),
             ])
@@ -161,7 +161,7 @@ public class DittoHelpers {
     
     
     
-    public static func setFullHorizontalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+    public static func addFullHConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
 
         let toView = toView ?? superView
 
@@ -172,19 +172,19 @@ public class DittoHelpers {
             toView.addConstraints([
                 NSLayoutConstraint(
                     item: view,
-                    attribute: .Left,
-                    relatedBy: .Equal,
+                    attribute: .left,
+                    relatedBy: .equal,
                     toItem: superView,
-                    attribute: .Left,
+                    attribute: .left,
                     multiplier: 1,
                     constant: 0),
                 
                 NSLayoutConstraint(
                     item: view,
-                    attribute: .Right,
-                    relatedBy: .Equal,
+                    attribute: .right,
+                    relatedBy: .equal,
                     toItem: superView,
-                    attribute: .Right,
+                    attribute: .right,
                     multiplier: 1,
                     constant: 0),
                 ])
@@ -194,11 +194,9 @@ public class DittoHelpers {
     
     
     
-    public static func setFullHorizontalAndVerticalConstraints(superView: UIView, views: [ UIView ], toView: UIView? = nil) {
-        
-        setFullHorizontalConstraints(superView, views: views, toView: toView)
-        setFullVerticalConstraints(superView, views: views, toView: toView)
-        
+    open static func addFullConstraints(withSuperView superView: UIView, views: [ UIView ], toView: UIView? = nil) {
+        addFullHConstraints(withSuperView: superView, views: views, toView: toView)
+        addFullVConstraints(withSuperView: superView, views: views, toView: toView)
     }
 
 }

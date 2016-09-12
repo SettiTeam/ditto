@@ -5,7 +5,7 @@ s.ios.deployment_target = '9.0'
 s.name = "Ditto"
 s.summary = "Layouts for all the devices."
 s.requires_arc = true
-s.version = "0.3"
+s.version = "0.3.0"
 s.license = { :type => "MIT", :file => "LICENSE" }
 s.author = { "Chase McClure" => "chase@curiosity.com" }
 s.homepage = "https://github.com/Curiosity/Ditto"

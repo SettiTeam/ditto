@@ -9,19 +9,19 @@
 import Foundation
 
 public enum Orientation {
-    case Portrait, Landscape
+    case portrait, landscape
 }
 
 public enum ScreenClass {
-    case Phone, Pad
+    case phone, pad
 }
 
 public enum SizeClass {
-    case Small, Medium, Large
+    case small, medium, large
 }
 
 public enum DensityClass {
-    case Low, Medium, High
+    case low, medium, high
 }
 
 public typealias DittoSheet = [ String: [ DittoBlock ] ]

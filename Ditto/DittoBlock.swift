@@ -22,7 +22,7 @@ public class DittoBlock {
         heights: [ SizeClass ] = [],
         constraints: [ NSLayoutConstraint ] = [],
         strings: [ String ]
-        ) {
+    ) {
         self.devices = devices
         self.widths = widths
         self.heights = heights
