@@ -8,8 +8,6 @@
 
 import Foundation
 
-public let DittoDimensionsDidChange = "DittoDimensionsDidChange"
-
 public class DittoDimensions {
     
     /// current configuration used to calculate dimensions and classes
@@ -127,7 +125,7 @@ public class DittoDimensions {
         if isNewOrientation || isNewScreenClass || isNewWidthClass || isNewHeightClass {
             NotificationCenter.default
                 .post(
-                    name: Notification.Name(rawValue: DittoDimensionsDidChange), object: nil,
+                    name: DittoNotification.dimensionsDidChange, object: nil,
                     userInfo: [
                         "isNewScreenClass": isNewScreenClass ])
         }

@@ -260,7 +260,7 @@ public class Ditto {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(onDimensionsDidChange),
-            name: NSNotification.Name(rawValue: DittoDimensionsDidChange),
+            name: DittoNotification.dimensionsDidChange,
             object: nil)
     }
 

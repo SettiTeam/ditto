@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A3535EAD1D11BE8A00E1BDB1 /* DittoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3535EAC1D11BE8A00E1BDB1 /* DittoHelper.swift */; };
+		A37814981D8B004A00A00DB6 /* DittoNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37814971D8B004A00A00DB6 /* DittoNotification.swift */; };
 		A3D23F751C04F54700A1466B /* Ditto.h in Headers */ = {isa = PBXBuildFile; fileRef = A3D23F741C04F54700A1466B /* Ditto.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3D23F821C04F6B200A1466B /* Ditto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D23F7C1C04F6B200A1466B /* Ditto.swift */; };
 		A3D23F831C04F6B200A1466B /* DittoConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D23F7D1C04F6B200A1466B /* DittoConfiguration.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		A3535EAC1D11BE8A00E1BDB1 /* DittoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DittoHelper.swift; sourceTree = "<group>"; };
+		A37814971D8B004A00A00DB6 /* DittoNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DittoNotification.swift; sourceTree = "<group>"; };
 		A3D23F711C04F54700A1466B /* Ditto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ditto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3D23F741C04F54700A1466B /* Ditto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ditto.h; sourceTree = "<group>"; };
 		A3D23F761C04F54700A1466B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 				A3D23F7D1C04F6B200A1466B /* DittoConfiguration.swift */,
 				A3D23F811C04F6B200A1466B /* DittoDimensions.swift */,
 				A3535EAC1D11BE8A00E1BDB1 /* DittoHelper.swift */,
+				A37814971D8B004A00A00DB6 /* DittoNotification.swift */,
 				A3D23F7E1C04F6B200A1466B /* DittoTypes.swift */,
 			);
 			path = Ditto;
@@ -158,6 +161,7 @@
 				A3D23F831C04F6B200A1466B /* DittoConfiguration.swift in Sources */,
 				A3D23F821C04F6B200A1466B /* Ditto.swift in Sources */,
 				A3535EAD1D11BE8A00E1BDB1 /* DittoHelper.swift in Sources */,
+				A37814981D8B004A00A00DB6 /* DittoNotification.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
