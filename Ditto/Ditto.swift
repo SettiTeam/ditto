@@ -16,10 +16,13 @@ class DittoWeakView {
     }
 }
 
+public typealias DittoMetrics = [ String: NSNumber ]
+
 public class Ditto {
 
     private static var configuration: DittoConfiguration!
     private static var layoutSheet: DittoSheet = [:]
+    private static var metrics: DittoMetrics = [:]
 
     private var keys: [ String ]!
     private weak var superView: UIView!
@@ -228,7 +231,7 @@ public class Ditto {
             NSLayoutConstraint.constraints(
                 withVisualFormat: string,
                 options: [],
-                metrics: nil,
+                metrics: Ditto.metrics,
                 views: views ))
     }
 
@@ -284,24 +287,25 @@ public class Ditto {
      Prepares Layout for use
 
      - Parameter sheets: LayoutSheets to be considered
+     - Parameter metrics: Global metrics dictionary tat will be passed to all layouts
      - Parameter config: Configuration used
      */
-    public static func initialize(_ sheets: [ DittoSheet ], configuration: DittoConfiguration? = nil) {
+    public static func initialize(
+        sheets: [ DittoSheet ],
+        metrics: DittoMetrics = [:],
+        configuration: DittoConfiguration? = nil
+    ) {
         // Combine all sheets into a single private sheet
         for sheet in sheets {
             for (key, def) in sheet {
                 layoutSheet[key] = def
             }
         }
+        
+        self.metrics = metrics
 
         // Create default configuration if one is not passed
-        if configuration != nil {
-            self.configuration = configuration
-        }
-        else {
-            self.configuration = DittoConfiguration()
-        }
-
+        self.configuration = configuration ?? DittoConfiguration()
         DittoDimensions.configuration = self.configuration
 
         Ditto.updateDimensions()
