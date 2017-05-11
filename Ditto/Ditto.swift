@@ -95,6 +95,7 @@ public class Ditto {
         }
         
         superView.removeConstraints(constraints)
+        constraints = []
 
         for group in blocks {
 
