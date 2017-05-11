@@ -3,8 +3,9 @@
 //  Ditto
 //
 //  Created by 🍕Chase McClure on 8/9/16.
-//  Copyright (c) 2016 Curiosity. All rights reserved.
+//  Copyright (c) 2016 Giant Slide Game Company. All rights reserved.
 //
+
 
 import Foundation
 
@@ -30,6 +31,8 @@ public class Ditto {
     private var blocks: [[ DittoBlock ]] = []
     private var onDimensionChange: (() -> ())?
     private var onScreenClassChange: (() -> ())?
+    
+    private var constraints: [ NSLayoutConstraint ] = []
 
 
     public init(
@@ -90,6 +93,8 @@ public class Ditto {
         if superView == nil {
             return
         }
+        
+        superView.removeConstraints(constraints)
 
         for group in blocks {
 
@@ -121,6 +126,8 @@ public class Ditto {
                 }
             }
         }
+        
+        superView.addConstraints(constraints)
 
         if immediately {
             superView.setNeedsLayout()
@@ -145,7 +152,7 @@ public class Ditto {
             return
         }
 
-        superView.addConstraint(
+        constraints.append(
             NSLayoutConstraint(
                 item: inner,
                 attribute: .centerX,
@@ -172,7 +179,7 @@ public class Ditto {
             return
         }
 
-        superView.addConstraint(
+        constraints.append(
             NSLayoutConstraint(
                 item: inner,
                 attribute: .centerY,
@@ -199,7 +206,7 @@ public class Ditto {
             return
         }
 
-        superView.addConstraints([
+        constraints.append(contentsOf: [
 
             NSLayoutConstraint(
                 item: inner,
@@ -227,7 +234,7 @@ public class Ditto {
             views[key] = weakView.view!
         }
 
-        superView.addConstraints(
+        constraints.append(contentsOf:
             NSLayoutConstraint.constraints(
                 withVisualFormat: string,
                 options: [],

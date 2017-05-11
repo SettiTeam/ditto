@@ -3,7 +3,7 @@
 //  Ditto
 //
 //  Created by Chase McClure on 11/24/15.
-//  Copyright © 2015 Curiosity. All rights reserved.
+//  Copyright (c) 2015 Giant Slide Game Company. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
