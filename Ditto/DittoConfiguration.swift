@@ -26,8 +26,11 @@ public class DittoConfiguration {
         
         // iPad Portrait
         padWidthSmall: CGFloat(694),     // iPad Landscape Half
-        padWidthMedium: CGFloat(1024)    // iPad Portrait/Landscape Primary
-    )                                    // iPad Landscape
+        padWidthMedium: CGFloat(1024),    // iPad Portrait/Landscape Primary
+    
+        // iPad Pro
+        padWidthLarge: CGFloat(1365)    // iPad Portrait/Landscape Primary
+    )
     
     var heightOversizeThreshold: CGFloat = 768
     

@@ -211,7 +211,11 @@ public class DittoDimensions {
             return .medium
         }
         
-        return .large
+        if screenWidth < configuration.breakpoints.padWidthLarge {
+            return .large
+        }
+        
+        return .xlarge
     }
     
     private static func setResolutionClass() -> DensityClass {

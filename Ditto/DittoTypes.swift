@@ -17,7 +17,7 @@ public enum ScreenClass {
 }
 
 public enum SizeClass {
-    case small, medium, large
+    case small, medium, large, xlarge
 }
 
 public enum DensityClass {
